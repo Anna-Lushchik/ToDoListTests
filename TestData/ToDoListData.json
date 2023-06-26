@@ -1,0 +1,17 @@
+[
+  {
+    "text": "Go to the shop",
+    "id": 1,
+    "priority": 2
+  },
+  {
+    "text": "Сlean up the apartment",
+    "id": 2,
+    "priority": 2
+  },
+  {
+    "text": "Сook dinner",
+    "id": 3,
+    "priority": 1
+  }
+]
