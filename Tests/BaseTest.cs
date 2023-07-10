@@ -7,15 +7,44 @@ namespace ToDoListTests.Tests
 
         public void Dispose()
         {
-            var client = new RestClient(Url);
-            var request = new RestRequest("", Method.Delete);
-            client.Execute(request);
-
             var json = File.ReadAllText("TestData\\ToDoListData.json");
 
-            request = new RestRequest("", Method.Post);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            client.Execute(request);
+            this.ExecuteDeleteRequest(Url, "");
+            this.ExecutePostRequest(Url, "", json);
+        }
+
+        protected RestResponse ExecuteGetRequest(string url)
+        {
+            var client = new RestClient(url);
+            var request = new RestRequest();
+
+            return client.Execute(request);
+        }
+
+        protected RestResponse ExecuteDeleteRequest(string url, string resource)
+        {
+            var client = new RestClient(url);
+            var request = new RestRequest(resource, Method.Delete);
+
+            return client.Execute(request);
+        }
+
+        protected RestResponse ExecutePostRequest(string url, string resource, string jsonBody)
+        {
+            var client = new RestClient(url);
+            var request = new RestRequest(resource, Method.Post);
+            request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
+
+            return client.Execute(request);
+        }
+
+        protected RestResponse ExecutePutRequest(string url, string resource, string jsonBody)
+        {
+            var client = new RestClient(url);
+            var request = new RestRequest(resource, Method.Put);
+            request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
+
+            return client.Execute(request);
         }
     }
 }

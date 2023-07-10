@@ -15,18 +15,8 @@
     "priority": 1
   },
   {
-    "text": "Go to the shop",
+    "text": "Wash the dog",
     "id": 4,
-    "priority": 2
-  },
-  {
-    "text": "Сlean up the apartment",
-    "id": 5,
-    "priority": 2
-  },
-  {
-    "text": "Сook dinner",
-    "id": 6,
-    "priority": 1
+    "priority": 0
   }
 ]

@@ -5,20 +5,14 @@
         [Fact]
         public void DeleteAllToDoListTest()
         {
-            var emptyList = new List<ToDoListModel>();
+            var response = this.ExecuteDeleteRequest(Url, "");
 
-            var client = new RestClient(Url);
-            var request = new RestRequest("", Method.Delete);
-            var response = client.Execute(request);
+            HttpStatusCode.NoContent.Should().Be(response.StatusCode);
+            String.Empty.Should().BeEquivalentTo(response.Content);
 
-            (HttpStatusCode.OK).Should().Be(response.StatusCode);
-            (String.Empty).Should().BeEquivalentTo(response.Content);
+            response = this.ExecuteGetRequest(Url);
 
-            var requestGet = new RestRequest();
-            response = client.Execute(requestGet);
-            var responseData = JsonConvert.DeserializeObject<List<ToDoListModel>>(response.Content);
-
-            emptyList.Should().BeEquivalentTo(responseData);
+            HttpStatusCode.NotFound.Should().Be(response.StatusCode);
         }
 
         [Fact]
@@ -26,23 +20,33 @@
         {
             int item = 1;
 
-            var client = new RestClient(Url);
-            var requestDelete = new RestRequest($"/{item}", Method.Delete);
-            var response = client.Execute(requestDelete);
+            var response = this.ExecuteDeleteRequest(Url, $"/{item}");
 
-            (HttpStatusCode.OK).Should().Be(response.StatusCode);
+            HttpStatusCode.NoContent.Should().Be(response.StatusCode);
             String.Empty.Should().BeEquivalentTo(response.Content);
-
-            var requestGet = new RestRequest();
-            response = client.Execute(requestGet);
-
-            var responseData = JsonConvert.DeserializeObject<List<ToDoListModel>>(response.Content);
 
             var expectedDataJson = File.ReadAllText("TestData\\ToDoListData.json");
             var expectedData = JsonConvert.DeserializeObject<List<ToDoListModel>>(expectedDataJson);
             expectedData?.RemoveAt(item - 1);
 
+            response = this.ExecuteGetRequest(Url);
+            var responseData = JsonConvert.DeserializeObject<List<ToDoListModel>>(response.Content);
+
             expectedData.Should().BeEquivalentTo(responseData);
+
+            response = this.ExecuteGetRequest(Url + $"/{item}");
+
+            HttpStatusCode.NotFound.Should().Be(response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(4)]
+        public void DeleteToDoListNotExistedItemTest(int item)
+        {
+            var response = this.ExecuteDeleteRequest(Url, $"/{item}");
+
+            HttpStatusCode.NotFound.Should().Be(response.StatusCode);
         }
     }
 }

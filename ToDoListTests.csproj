@@ -12,14 +12,22 @@
   <ItemGroup>
     <None Remove="TestData\ToDoListData.json" />
     <None Remove="TestData\UpdatedPostToDoListData.json" />
+    <None Remove="TestData\UpdatedPostToDoListItemData.json" />
+    <None Remove="TestData\UpdatedPostToDoListItemWithoutPriorityData.json" />
     <None Remove="TestData\UpdatedPutToDoListData.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestData\UpdatedPostToDoListData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\UpdatedPostToDoListItemWithoutPriorityData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\UpdatedPutToDoListData.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\UpdatedPostToDoListData.json">
+    <Content Include="TestData\UpdatedPostToDoListItemData.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\ToDoListData.json">

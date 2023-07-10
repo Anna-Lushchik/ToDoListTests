@@ -5,16 +5,13 @@ namespace ToDoListTests.Tests
         [Fact]
         public void GetAllToDoListTest()
         {
-            var client = new RestClient(Url);
-            var request = new RestRequest();
-            var response = client.Execute(request);
-
-            var responseData = JsonConvert.DeserializeObject<List<ToDoListModel>>(response.Content);
-
             var expectedDataJson = File.ReadAllText("TestData\\ToDoListData.json");
             var expectedData = JsonConvert.DeserializeObject<List<ToDoListModel>>(expectedDataJson);
 
-            (HttpStatusCode.OK).Should().Be(response.StatusCode);
+            var response = this.ExecuteGetRequest(Url);
+            var responseData = JsonConvert.DeserializeObject<List<ToDoListModel>>(response.Content);
+
+            HttpStatusCode.OK.Should().Be(response.StatusCode);
             expectedData.Should().BeEquivalentTo(responseData);
         }
 
@@ -23,17 +20,24 @@ namespace ToDoListTests.Tests
         {
             int item = 1;
 
-            var client = new RestClient(Url + $"/{item}");
-            var request = new RestRequest();
-            var response = client.Execute(request);
-
-            var responseData = JsonConvert.DeserializeObject<ToDoListModel>(response.Content);
-
             var expectedDataJson = File.ReadAllText("TestData\\ToDoListData.json");
             var expectedData = JsonConvert.DeserializeObject<List<ToDoListModel>>(expectedDataJson)[item - 1];
 
-            (HttpStatusCode.OK).Should().Be(response.StatusCode);
+            var response = this.ExecuteGetRequest(Url + $"/{item}");
+            var responseData = JsonConvert.DeserializeObject<ToDoListModel>(response.Content);
+
+            HttpStatusCode.OK.Should().Be(response.StatusCode);
             expectedData.Should().BeEquivalentTo(responseData);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(4)]
+        public void GetToDoListNotExistedItemTest(int item)
+        {
+            var response = this.ExecuteGetRequest(Url + $"/{item}");
+
+            HttpStatusCode.NotFound.Should().Be(response.StatusCode);
         }
     }
 }
